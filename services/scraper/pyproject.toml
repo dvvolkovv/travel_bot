@@ -8,6 +8,8 @@ dependencies = [
   "redis>=5.0.0",
   "lxml>=5.2.0",
   "cssselect>=1.2.0",
+  "playwright>=1.47.0",
+  "playwright-stealth>=1.0.6",
 ]
 
 [project.optional-dependencies]
