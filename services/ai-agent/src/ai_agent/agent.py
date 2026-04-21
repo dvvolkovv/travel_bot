@@ -89,6 +89,8 @@ async def run_turn(
 
 
 def _summarize(tool_name: str, result: dict[str, Any]) -> str:
+    if "error" in result:
+        return f"error: {result['error']}"
     if tool_name == "search_hotels":
         n = len(result.get("offers", []))
         total = result.get("total_found", 0)

@@ -1,11 +1,22 @@
 from __future__ import annotations
 
 import json
+from datetime import date, datetime
 from typing import Any
 
 import asyncpg
 
 from scraper.types import HotelOffer
+
+
+def _as_date(value: Any) -> date:
+    if isinstance(value, date) and not isinstance(value, datetime):
+        return value
+    if isinstance(value, datetime):
+        return value.date()
+    if isinstance(value, str):
+        return date.fromisoformat(value)
+    raise TypeError(f"expected date or ISO string, got {type(value).__name__}")
 
 INSERT_OFFER_SQL = """
 INSERT INTO offer_snapshot
@@ -32,8 +43,8 @@ async def persist_offers(
             "booking.com",
             o.offer_id,
             o.hotel_name,
-            query_args["checkin"],
-            query_args["checkout"],
+            _as_date(query_args["checkin"]),
+            _as_date(query_args["checkout"]),
             query_args.get("guests_adults", 2),
             float(o.price_per_night_usd),
             json.dumps({
