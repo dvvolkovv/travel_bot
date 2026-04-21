@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { nanoid } from 'nanoid';
 import type { HotelOffer } from '@hotel-deals/shared-types';
 
 export interface Message {
@@ -42,7 +43,7 @@ export const useChatStore = create<ChatStore>((set) => ({
       messages: [
         ...s.messages,
         {
-          id: crypto.randomUUID(),
+          id: nanoid(),
           role: 'assistant',
           text: s.currentText,
           offers: s.currentOffers ?? undefined,
@@ -55,7 +56,7 @@ export const useChatStore = create<ChatStore>((set) => ({
     })),
   appendUserMessage: (text) =>
     set((s) => ({
-      messages: [...s.messages, { id: crypto.randomUUID(), role: 'user', text }],
+      messages: [...s.messages, { id: nanoid(), role: 'user', text }],
     })),
   setStreaming: (on) => set({ isStreaming: on }),
   reset: () =>
