@@ -58,11 +58,37 @@ export class ChatController {
 
     const reader = upstreamResp.body.getReader();
     const decoder = new TextDecoder();
+    let assistantText = '';
+    let cardsJson: unknown = null;
+    let buffer = '';
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
-      res.write(decoder.decode(value, { stream: true }));
+      const chunk = decoder.decode(value, { stream: true });
+      res.write(chunk);
+      buffer += chunk;
+      const events = buffer.split('\n\n');
+      buffer = events.pop() ?? '';
+      for (const ev of events) {
+        const typeMatch = ev.match(/^event: (\w+)/m);
+        const dataMatch = ev.match(/^data: (.+)$/m);
+        if (!typeMatch || !dataMatch) continue;
+        try {
+          const data = JSON.parse(dataMatch[1]);
+          if (typeMatch[1] === 'token') assistantText += data.text ?? '';
+          if (typeMatch[1] === 'cards') cardsJson = data.offers;
+        } catch {
+          // ignore parse errors
+        }
+      }
     }
     res.end();
+
+    await this.sessions.appendMessage(session_id, {
+      role: 'assistant',
+      content: cardsJson
+        ? [{ type: 'text', text: assistantText }, { type: 'cards', offers: cardsJson }]
+        : assistantText,
+    });
   }
 }
