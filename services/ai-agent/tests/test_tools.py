@@ -1,4 +1,4 @@
-from ai_agent.tools import TOOLS, TOOL_HANDLERS
+from ai_agent.tools import TOOLS
 
 
 def test_tools_registered() -> None:
