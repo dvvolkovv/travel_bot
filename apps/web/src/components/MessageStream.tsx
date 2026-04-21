@@ -5,7 +5,7 @@ import { useChatStore } from '@/lib/chat-store';
 import { UserMessage } from './UserMessage';
 import { AssistantMessage } from './AssistantMessage';
 
-export function MessageStream({ nights }: { nights: number }) {
+export function MessageStream() {
   const { messages, currentText, currentTrace, currentOffers, isStreaming } = useChatStore();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -19,7 +19,7 @@ export function MessageStream({ nights }: { nights: number }) {
         m.role === 'user' ? (
           <UserMessage key={m.id} text={m.text} />
         ) : (
-          <AssistantMessage key={m.id} text={m.text} offers={m.offers} trace={m.trace} nights={nights} />
+          <AssistantMessage key={m.id} text={m.text} offers={m.offers} trace={m.trace} />
         ),
       )}
       {isStreaming && (
@@ -27,7 +27,6 @@ export function MessageStream({ nights }: { nights: number }) {
           text={currentText}
           trace={currentTrace}
           offers={currentOffers ?? undefined}
-          nights={nights}
           isStreaming
         />
       )}

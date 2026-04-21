@@ -3,11 +3,15 @@
 import type { HotelOffer } from '@hotel-deals/shared-types';
 import { useTranslations, useFormatter } from 'next-intl';
 
-export function HotelCard({ offer, nights }: { offer: HotelOffer; nights: number }) {
+export function HotelCard({ offer }: { offer: HotelOffer }) {
   const t = useTranslations('card');
   const fmt = useFormatter();
   const currency = offer.price_per_night_original.currency;
   const price = offer.price_per_night_original.amount;
+  const nights =
+    offer.price_per_night_usd > 0
+      ? Math.max(1, Math.round(offer.total_usd / offer.price_per_night_usd))
+      : 1;
 
   return (
     <article className="rounded-2xl overflow-hidden bg-zinc-900 border border-zinc-800">
@@ -49,7 +53,14 @@ export function HotelCard({ offer, nights }: { offer: HotelOffer; nights: number
             )}
           </div>
           <div className="text-sm text-zinc-400">
-            {t('total', { nights })}: {fmt.number(Number(price) * nights, { style: 'currency', currency })}
+            {t('total', { nights })}:
+            {' '}
+            {fmt.number(Number(offer.total_usd || Number(price) * nights), { style: 'currency', currency: 'USD' })}
+            {currency !== 'USD' && (
+              <span className="ml-2">
+                ({fmt.number(Number(price) * nights, { style: 'currency', currency })})
+              </span>
+            )}
           </div>
         </div>
 

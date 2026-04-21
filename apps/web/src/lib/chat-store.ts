@@ -39,21 +39,27 @@ export const useChatStore = create<ChatStore>((set) => ({
   appendToken: (t) => set((s) => ({ currentText: s.currentText + t })),
   setOffers: (offers) => set({ currentOffers: offers }),
   commitAssistantMessage: () =>
-    set((s) => ({
-      messages: [
-        ...s.messages,
-        {
-          id: nanoid(),
-          role: 'assistant',
-          text: s.currentText,
-          offers: s.currentOffers ?? undefined,
-          trace: s.currentTrace,
-        },
-      ],
-      currentTrace: [],
-      currentText: '',
-      currentOffers: null,
-    })),
+    set((s) => {
+      const hasContent = s.currentText.trim() || (s.currentOffers && s.currentOffers.length > 0);
+      if (!hasContent) {
+        return { currentTrace: [], currentText: '', currentOffers: null };
+      }
+      return {
+        messages: [
+          ...s.messages,
+          {
+            id: nanoid(),
+            role: 'assistant',
+            text: s.currentText,
+            offers: s.currentOffers ?? undefined,
+            trace: s.currentTrace,
+          },
+        ],
+        currentTrace: [],
+        currentText: '',
+        currentOffers: null,
+      };
+    }),
   appendUserMessage: (text) =>
     set((s) => ({
       messages: [...s.messages, { id: nanoid(), role: 'user', text }],

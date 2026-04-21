@@ -18,7 +18,6 @@ export default function ChatPage() {
   const t = useTranslations('chat');
   const store = useChatStore();
   const started = useRef(false);
-  const nights = 5;
 
   const sendTurn = async (text: string) => {
     store.appendUserMessage(text);
@@ -62,7 +61,7 @@ export default function ChatPage() {
         <div className="font-semibold">Hotel Deals Bot</div>
         <LanguageSwitcher />
       </header>
-      <MessageStream nights={nights} />
+      <MessageStream />
       <div className="pt-3">
         {!store.isStreaming && store.messages.length > 0 && (
           <SuggestionChips onPick={(txt) => void sendTurn(txt)} />

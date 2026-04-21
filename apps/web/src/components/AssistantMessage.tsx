@@ -5,12 +5,11 @@ import { AgentTrace } from './AgentTrace';
 import { HotelCard } from './HotelCard';
 
 export function AssistantMessage({
-  text, trace, offers, nights = 5, isStreaming = false,
+  text, trace, offers, isStreaming = false,
 }: {
   text: string;
   trace?: string[];
   offers?: HotelOffer[];
-  nights?: number;
   isStreaming?: boolean;
 }) {
   return (
@@ -21,7 +20,7 @@ export function AssistantMessage({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {offers.map((o) => (
             <div key={o.offer_id} data-testid="hotel-card">
-              <HotelCard offer={o} nights={nights} />
+              <HotelCard offer={o} />
             </div>
           ))}
         </div>
