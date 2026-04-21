@@ -50,3 +50,33 @@ jobs:
       - run: pip install -e '.[dev]'
       - run: ruff check .
       - run: pytest
+
+  evals:
+    name: LLM evals
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    defaults:
+      run:
+        working-directory: services/ai-agent
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -e '.[dev]' -e ../scraper
+      - run: pytest evals/test_evals.py -v
+      # Full LLM eval run against real Anthropic is gated on the secret being set.
+      # Skipped automatically if secret is empty.
+      - name: Run EN evals against real API
+        if: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python evals/run_evals.py en
+
+  e2e:
+    name: E2E smoke (manual)
+    runs-on: ubuntu-latest
+    if: false  # Disabled in PR CI for M1 — requires full stack (Anthropic + scraper + api + web).
+    # To run manually: workflow_dispatch, or un-gate after dev env is reachable from GH runners.
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "E2E smoke is run manually post-deploy in M1. See docs/superpowers/plans/2026-04-21-m1-poc.md Step 17.5."

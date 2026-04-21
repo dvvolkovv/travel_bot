@@ -1,0 +1,36 @@
+{
+  "landing": {
+    "hero": {
+      "title": "Find the best hotel deals",
+      "subtitle": "Tell me what you need — the agent searches across travel sites to find you top options with discounts.",
+      "placeholder": "Try: Barcelona 5 nights in June under €600, close to beach",
+      "submit": "Search"
+    }
+  },
+  "chat": {
+    "typing": "Thinking...",
+    "thinking": "🧠 Analyzing request",
+    "searching": "🔎 Searching Booking.com",
+    "filtering": "📊 Filtering results",
+    "finalizing": "💬 Selecting top 5",
+    "suggestion_cheaper": "Make it cheaper",
+    "suggestion_closer_center": "Closer to center",
+    "suggestion_higher_rated": "Higher rated",
+    "suggestion_different_dates": "Different dates",
+    "show_reasoning": "Show reasoning",
+    "hide_reasoning": "Hide reasoning",
+    "error_retry": "Something went wrong. Try again."
+  },
+  "card": {
+    "book_now": "Book on Booking.com",
+    "per_night": "per night",
+    "total": "Total for {nights} nights",
+    "was_price": "was",
+    "discount": "-{pct}%",
+    "distance_beach": "{km} km to beach",
+    "distance_center": "{km} km to center"
+  },
+  "nav": {
+    "switch_language": "RU"
+  }
+}

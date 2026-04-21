@@ -12,7 +12,15 @@
   "dependencies": {
     "next": "^15.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "next-intl": "^3.26.0",
+    "zustand": "^5.0.0",
+    "nanoid": "^5.0.0",
+    "@hotel-deals/shared-types": "workspace:*",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "clsx": "^2.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

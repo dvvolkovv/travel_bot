@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ChatSession {
+  id         String    @id
+  lang       String
+  currency   String
+  firstMsgAt DateTime?
+  lastMsgAt  DateTime?
+  msgCount   Int       @default(0)
+  createdAt  DateTime  @default(now())
+
+  @@map("chat_session")
+}
+
+model OfferSnapshot {
+  id         String   @id
+  sessionId  String
+  source     String
+  hotelId    String
+  hotelName  String
+  checkin    DateTime
+  checkout   DateTime
+  guests     Int
+  priceUsd   Decimal  @db.Decimal(10, 2)
+  priceOrig  Json
+  bookingUrl String   @db.Text
+  rawJson    Json
+  createdAt  DateTime @default(now())
+
+  @@index([sessionId])
+  @@map("offer_snapshot")
+}
+
+model ClickLog {
+  id         String   @id @default(cuid())
+  offerId    String
+  sessionId  String?
+  ip         String?
+  userAgent  String?
+  referer    String?
+  createdAt  DateTime @default(now())
+
+  @@index([offerId])
+  @@index([createdAt])
+  @@map("click_log")
+}
