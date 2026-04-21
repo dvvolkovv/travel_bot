@@ -32,11 +32,14 @@ class Config:
 
     def make_anthropic_client(self) -> anthropic.AsyncAnthropic:
         """Create an Async Anthropic client using OAuth (auth_token) if available,
-        else falling back to API key. This lets local/dev users plug in their
-        Claude Code OAuth bearer token and production run with a long-lived API key.
+        else falling back to API key. OAuth tokens (sk-ant-oat-*) from Claude Code
+        setup-token require the oauth-2025-04-20 beta header.
         """
         if self.anthropic_auth_token:
-            return anthropic.AsyncAnthropic(auth_token=self.anthropic_auth_token)
+            return anthropic.AsyncAnthropic(
+                auth_token=self.anthropic_auth_token,
+                default_headers={"anthropic-beta": "oauth-2025-04-20"},
+            )
         if self.anthropic_api_key:
             return anthropic.AsyncAnthropic(api_key=self.anthropic_api_key)
         raise RuntimeError(
