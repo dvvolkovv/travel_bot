@@ -1,0 +1,36 @@
+{
+  "landing": {
+    "hero": {
+      "title": "Найди лучшие скидки на отели",
+      "subtitle": "Скажи что нужно — агент ищет по сайтам бронирования и находит лучшие варианты со скидками.",
+      "placeholder": "Например: Барселона, 5 ночей в июне, до €600, рядом с пляжем",
+      "submit": "Искать"
+    }
+  },
+  "chat": {
+    "typing": "Думаю...",
+    "thinking": "🧠 Анализирую запрос",
+    "searching": "🔎 Ищу на Booking.com",
+    "filtering": "📊 Фильтрую результаты",
+    "finalizing": "💬 Выбираю топ-5",
+    "suggestion_cheaper": "Подешевле",
+    "suggestion_closer_center": "Ближе к центру",
+    "suggestion_higher_rated": "С лучшим рейтингом",
+    "suggestion_different_dates": "Другие даты",
+    "show_reasoning": "Показать ход мысли",
+    "hide_reasoning": "Скрыть ход мысли",
+    "error_retry": "Что-то пошло не так. Попробуй ещё раз."
+  },
+  "card": {
+    "book_now": "Забронировать на Booking.com",
+    "per_night": "за ночь",
+    "total": "Итого за {nights} ночей",
+    "was_price": "было",
+    "discount": "-{pct}%",
+    "distance_beach": "{km} км до пляжа",
+    "distance_center": "{km} км до центра"
+  },
+  "nav": {
+    "switch_language": "EN"
+  }
+}
