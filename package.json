@@ -10,5 +10,8 @@
     "test": "pnpm -r test",
     "build": "pnpm -r build",
     "dev:infra": "docker compose up -d postgres redis"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.0"
   }
 }
