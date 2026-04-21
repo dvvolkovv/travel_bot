@@ -1,0 +1,27 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
+import request from 'supertest';
+import { AppModule } from '../src/app.module';
+
+describe('Health endpoint', () => {
+  let app: INestApplication;
+
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+    await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
+  });
+
+  it('GET /health returns { status: "ok" }', async () => {
+    const response = await request(app.getHttpServer()).get('/health');
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ status: 'ok', service: 'api' });
+  });
+});
