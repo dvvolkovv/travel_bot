@@ -190,3 +190,38 @@ def _pick_ua() -> str:
 
 def _pick_viewport() -> dict:
     return random.choice(_VIEWPORTS)
+
+
+async def get_details(
+    booking_url: str,
+    offer_id: str,
+    *,
+    proxy_pool: ProxyPool | None = None,
+):
+    from .booking_parse import parse_details_html
+
+    from playwright.async_api import async_playwright
+    try:
+        from playwright_stealth import stealth_async  # type: ignore
+    except ImportError:
+        stealth_async = None  # type: ignore
+
+    proxy = proxy_pool.pick() if proxy_pool else None
+    proxy_arg = {"server": proxy.url} if proxy else None
+
+    async with async_playwright() as pw:
+        browser = await pw.chromium.launch(headless=True, proxy=proxy_arg)
+        try:
+            context = await browser.new_context(
+                user_agent=_pick_ua(),
+                viewport=_pick_viewport(),
+                locale="en-US",
+            )
+            page = await context.new_page()
+            if stealth_async is not None:
+                await stealth_async(page)
+            await page.goto(booking_url, wait_until="networkidle", timeout=NAV_TIMEOUT_MS)
+            html = await page.content()
+            return parse_details_html(html, offer_id=offer_id)
+        finally:
+            await browser.close()

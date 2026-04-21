@@ -19,8 +19,13 @@ from .booking_selectors import (
     CARD_RATING_LABEL,
     CARD_ROOT,
     CARD_STARS,
+    DETAILS_ADDRESS,
+    DETAILS_AMENITIES,
+    DETAILS_DESCRIPTION,
+    DETAILS_NAME,
+    DETAILS_PHOTOS,
 )
-from .types import HotelOffer, PriceOriginal
+from .types import HotelDetails, HotelOffer, PriceOriginal
 
 _PRICE_RE = re.compile(r"(?P<currency>[€£$]|US\$|RUB|₽)\s*(?P<amount>[\d\s,.]+)")
 _DISTANCE_RE = re.compile(r"(?P<km>[\d.]+)\s*km", re.IGNORECASE)
@@ -136,3 +141,47 @@ def _parse_price(text: str | None) -> Decimal | None:
         return Decimal(amount_str)
     except (ValueError, ArithmeticError):
         return None
+
+
+def parse_details_html(html: str, offer_id: str) -> HotelDetails:
+    doc = lxml_html.fromstring(html)
+
+    name_el = doc.cssselect(DETAILS_NAME)
+    name = name_el[0].text_content().strip() if name_el else ""
+
+    desc_el = doc.cssselect(DETAILS_DESCRIPTION)
+    description = desc_el[0].text_content().strip() if desc_el else ""
+
+    amenities: list[str] = []
+    seen: set[str] = set()
+    for el in doc.cssselect(DETAILS_AMENITIES):
+        t = el.text_content().strip()
+        if t and t not in seen:
+            seen.add(t)
+            amenities.append(t)
+        if len(amenities) >= 20:
+            break
+
+    photos: list[str] = []
+    seen_urls: set[str] = set()
+    for el in doc.cssselect(DETAILS_PHOTOS):
+        src = el.get("src", "")
+        if src.startswith("https://") and src not in seen_urls:
+            seen_urls.add(src)
+            photos.append(src)
+        if len(photos) >= 10:
+            break
+
+    addr_el = doc.cssselect(DETAILS_ADDRESS)
+    address = addr_el[0].text_content().strip() if addr_el else None
+
+    return HotelDetails(
+        offer_id=offer_id,
+        hotel_name=name,
+        description=description,
+        amenities=amenities,
+        room_types=[],
+        cancellation_policy=None,
+        photos=photos,
+        address=address,
+    )

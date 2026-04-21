@@ -36,3 +36,10 @@ AMENITY_KEYWORDS = {
     "gym": ["fitness", "gym"],
     "pet_friendly": ["pets allowed", "pet-friendly"],
 }
+
+# Hotel-details page selectors
+DETAILS_NAME = 'h2.pp-header__title, h2[class*="pp-header"], header h2'
+DETAILS_DESCRIPTION = '#property_description_content, [data-testid="property-description"]'
+DETAILS_AMENITIES = '[data-testid="property-most-popular-facilities-wrapper"] [data-testid="facility-highlight-name"], [data-testid="property-section--content"] li'
+DETAILS_PHOTOS = 'img[src*="bstatic.com"]'
+DETAILS_ADDRESS = '[data-testid="address"], [data-testid="PropertyHeaderAddressDesktop-wrapper"]'
